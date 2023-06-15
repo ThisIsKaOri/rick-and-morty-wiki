@@ -9,6 +9,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CharacterType, CharactersListType } from '../models/Character';
 import { RootStackParamList } from '../App';
 import CharacterItem from './CharacterItem';
+import { CharacterDetailsProps } from './CharacterDetails';
 
 type PageInfoType = {
 
@@ -23,7 +24,7 @@ const baseUrl = 'https://rickandmortyapi.com/api/character';
 const CharactersList: React.FC = () => {
 
   const [characters, setCharacters] = useState<CharactersListType>([]);
-  const top = useRef<ScrollView> (null);
+  const top = useRef<ScrollView>(null);
   const [pageInfo, setPageInfo] = useState({
     count: 0,
     pages: 0,
@@ -50,7 +51,7 @@ const CharactersList: React.FC = () => {
       })
       .catch(error => {
         setCharacters([])
-        console.error(error);
+        //console.error(error);
       });
   }, [name]);
 
@@ -64,7 +65,7 @@ const CharactersList: React.FC = () => {
           scrollToTop();
         })
         .catch(error => {
-          console.error(error);
+          //console.error(error);
         });
     }
   };
@@ -79,7 +80,7 @@ const CharactersList: React.FC = () => {
           scrollToTop();
         })
         .catch(error => {
-
+          //console.error(error);
         });
     }
   };
@@ -109,7 +110,12 @@ const CharactersList: React.FC = () => {
           />
           {characters.length === 0 &&
             <View style={{ display: 'flex', justifyContent: 'center', paddingVertical: '8%' }}>
-              <Text style={{ textAlign: 'center' }}>No Characters found..</Text>
+              <Text style={{ 
+                textAlign: 'center', 
+                color:'rgb(231, 98, 215)',
+                fontWeight: 'bold', 
+                fontSize: 20
+              }}>No Characters found..</Text>
             </View>
           }
         </View>
@@ -117,19 +123,19 @@ const CharactersList: React.FC = () => {
           <View style={{
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'space-evenly',
+            justifyContent: 'center',
             padding: '4%'
           }}>
             {pageInfo.prev &&
               <TouchableOpacity onPress={handleLoadPreviousPage}
-                style={styles.card}>
-                <Text>Previous Page</Text>
+                style={styles.button}>
+                <Text style={{ color: 'rgba(151,206,76, 1)' }}>Prev</Text>
               </TouchableOpacity>
             }
             {pageInfo.next &&
               <TouchableOpacity onPress={handleLoadNextPage}
-                style={styles.card}>
-                <Text>Next Page</Text>
+                style={styles.button}>
+                <Text style={{ color: 'rgba(151,206,76, 1)' }}>Next</Text>
               </TouchableOpacity>
             }
           </View>
@@ -168,6 +174,29 @@ const styles = StyleSheet.create({
     padding: '5%',
     margin: '2%',
     borderRadius: 50,
+    color: 'rgba(231, 98, 215, 1)'
+  },
+  button: {
+    padding: '4%',
+    marginVertical: '1%',
+    marginHorizontal: '2%',
+    maxWidth: '100%',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    textAlign: 'left',
+    backgroundColor: 'rgba(231, 98, 215, 0.8)',
+    shadowColor: 'rgba(31, 38, 135, 0.37)',
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 32,
+    elevation: 5,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.18)',
   }
 })
 

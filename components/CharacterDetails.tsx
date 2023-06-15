@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, ImageBackground } from 'react-native';
 import axios from 'axios';
 import { RouteProp } from '@react-navigation/native';
 import { CharacterType } from '../models/Character';
 import { RootStackParamList } from '../App';
 
-type CharacterDetailsProps = {
+export type CharacterDetailsProps = {
 
-    route: RouteProp<RootStackParamList, 'Details'>;
+    route: any;
 };
 
 const CharacterDetails: React.FC<CharacterDetailsProps> = ({ route }) =>  {
@@ -33,18 +33,21 @@ const CharacterDetails: React.FC<CharacterDetailsProps> = ({ route }) =>  {
 
     return (
         <ImageBackground source={{ uri: 'https://wallpapercave.com/wp/wp11151412.png' }}>
+            <View style={{ minHeight: '100%'}}>
             <View style={styles.card}>
                 <Text
                     style={{
                         fontSize: 30,
                         fontWeight: 'bold',
                         flexWrap: 'wrap',
-                        maxWidth: '100%'
+                        maxWidth: '100%',
+                        color: 'rgb(231, 98, 215)'
+
                     }}>{character.name}</Text>
                 <Text>Status: {character.status}</Text>
                 <View style={styles.image}>
                     <Image source={{ uri: character.image }}
-                        style={{ width: '80%', aspectRatio: '1/1', borderRadius: 15 }} />
+                        style={{ width: '100%', aspectRatio: '1/1', borderRadius: 15 }} />
                 </View>
                 <Text>Species: {character.species}</Text>
                 <Text>Type: {character.type}</Text>
@@ -58,6 +61,7 @@ const CharacterDetails: React.FC<CharacterDetailsProps> = ({ route }) =>  {
                         )}
                 </View> */}
             </View>
+            </View>
         </ImageBackground>
     );
 };
@@ -67,7 +71,7 @@ const styles = StyleSheet.create({
         padding: '6%',
         margin: '2%',
         maxWidth: '100%',
-        minHeight: '97.5%',
+        minHeight: '85%',
         textAlign: 'left',
         backgroundColor: 'rgba(255, 255, 255, 0.5)',
         shadowColor: 'rgba(31, 38, 135, 0.37)',

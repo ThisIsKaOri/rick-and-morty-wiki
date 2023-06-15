@@ -18,7 +18,13 @@ const CharacterItem: React.FC<CharacterItemProps> = ({ character, onPress }) => 
           borderRadius: 50 }}/>
       </View>
       <View>
-        <Text style={{fontSize: 20, fontWeight: 'bold', flexWrap: 'wrap', maxWidth: '100%'}}>{character.name}</Text>
+        <Text style={{
+          fontSize: 20, 
+          fontWeight: 'bold', 
+          flexWrap: 'wrap', 
+          maxWidth: '100%',
+          color: 'rgb(231, 98, 215)'
+          }}>{character.name}</Text>
         <Text>{character.status}</Text>
         <Text style={{fontSize: 15}}>{character.species}</Text>
       </View>
