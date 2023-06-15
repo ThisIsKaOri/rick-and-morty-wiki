@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-import React, { useEffect, useState } from 'react';
-import { View, FlatList, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
+import React, { useEffect, useRef, useState, LegacyRef } from 'react';
+import { View, FlatList, Text, TouchableOpacity, StyleSheet, ImageBackground, TextInput, ScrollView } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -18,22 +18,41 @@ type PageInfoType = {
   prev: string;
 };
 
+const baseUrl = 'https://rickandmortyapi.com/api/character';
+
 const CharactersList: React.FC = () => {
+
   const [characters, setCharacters] = useState<CharactersListType>([]);
-  const [pageInfo, setPageInfo] = useState<PageInfoType | null>(null);
+  const top = useRef<ScrollView> (null);
+  const [pageInfo, setPageInfo] = useState({
+    count: 0,
+    pages: 0,
+    next: '',
+    prev: ''
+  });
+  const [name, setName] = useState('');
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
+  const scrollToTop = () => {
+    top.current?.scrollTo({
+      y: 0,
+      animated: true,
+    });
+  };
+
   useEffect(() => {
+    let url = name ? `${baseUrl}/?name=${name}` : baseUrl;
     axios
-      .get('https://rickandmortyapi.com/api/character')
+      .get(url)
       .then(response => {
         setCharacters(response.data.results);
         setPageInfo(response.data.info);
       })
       .catch(error => {
+        setCharacters([])
         console.error(error);
       });
-  }, []);
+  }, [name]);
 
   const handleLoadNextPage = () => {
     if (pageInfo?.next) {
@@ -42,6 +61,7 @@ const CharactersList: React.FC = () => {
         .then(response => {
           setCharacters(response.data.results);
           setPageInfo(response.data.info);
+          scrollToTop();
         })
         .catch(error => {
           console.error(error);
@@ -56,11 +76,16 @@ const CharactersList: React.FC = () => {
         .then(response => {
           setCharacters(response.data.results);
           setPageInfo(response.data.info);
+          scrollToTop();
         })
         .catch(error => {
-          console.error(error);
+
         });
     }
+  };
+
+  const handleSearch = (text: string) => {
+    setName(text);
   };
 
   const handleCharacterPress = (id: string) => {
@@ -73,27 +98,43 @@ const CharactersList: React.FC = () => {
 
   return (
     <ImageBackground source={{ uri: 'https://wallpapercave.com/wp/wp11151412.png' }}>
-      <View style={{
-          display: 'flex', 
-          flexDirection: 'row', 
-          justifyContent:'space-evenly',
-          padding: '4%'}}>
-        <TouchableOpacity onPress={handleLoadPreviousPage}
-          style={styles.card}>
-          <Text>Previous Page</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleLoadNextPage}
-        style={styles.card}>
-          <Text>Next Page</Text>
-        </TouchableOpacity>
-      </View>
-      <View>
-        <FlatList
-          data={characters}
-          renderItem={renderCharacterItem}
-          keyExtractor={item => item.id.toString()}
-        />
-      </View>
+      <ScrollView ref={top} style={{ minHeight: '100%' }}>
+        <TextInput value={name} onChangeText={handleSearch} placeholder='Search by name'
+          style={styles.searchBar} />
+        <View>
+          <FlatList
+            data={characters}
+            renderItem={renderCharacterItem}
+            keyExtractor={item => item.id.toString()}
+          />
+          {characters.length === 0 &&
+            <View style={{ display: 'flex', justifyContent: 'center', paddingVertical: '8%' }}>
+              <Text style={{ textAlign: 'center' }}>No Characters found..</Text>
+            </View>
+          }
+        </View>
+        {pageInfo.pages > 1 &&
+          <View style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            padding: '4%'
+          }}>
+            {pageInfo.prev &&
+              <TouchableOpacity onPress={handleLoadPreviousPage}
+                style={styles.card}>
+                <Text>Previous Page</Text>
+              </TouchableOpacity>
+            }
+            {pageInfo.next &&
+              <TouchableOpacity onPress={handleLoadNextPage}
+                style={styles.card}>
+                <Text>Next Page</Text>
+              </TouchableOpacity>
+            }
+          </View>
+        }
+      </ScrollView>
     </ImageBackground>
   );
 };
@@ -121,7 +162,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.18)',
   },
-
+  searchBar: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    minHeight: '7%',
+    padding: '5%',
+    margin: '2%',
+    borderRadius: 50,
+  }
 })
 
 
