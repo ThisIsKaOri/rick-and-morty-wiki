@@ -1,18 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import CharactersList from './components/CharactersList';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import CharacterList from './components/CharactersList';
+import CharacterDetails from './components/CharacterDetails';
 
-export default function App() {
+export type RootStackParamList = {
+  CharactersList: undefined;
+  Details: { id: string };
+};
+
+const Stack = createStackNavigator();
+
+const App: React.FC = () => {
+  
   return (
-    <CharactersList/>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Characters" component={CharacterList} />
+        <Stack.Screen name="Details" component={CharacterDetails} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
+export default App;

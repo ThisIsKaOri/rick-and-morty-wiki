@@ -1,7 +1,7 @@
 export type CharactersListType = CharacterType [];
 
 export type CharacterType = {
-    id:       number;
+    id:       string;
     name:     string;
     status:   string;
     species:  string;
@@ -13,9 +13,9 @@ export type CharacterType = {
     episode:  string[];
     url:      string;
     created:  Date;
-}
+};
 
 type Location = {
     name: string;
     url:  string;
-}
+};
