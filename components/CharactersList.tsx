@@ -9,7 +9,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CharacterType, CharactersListType } from '../models/Character';
 import { RootStackParamList } from '../App';
 import CharacterItem from './CharacterItem';
-import { CharacterDetailsProps } from './CharacterDetails';
 
 type PageInfoType = {
 
@@ -23,7 +22,10 @@ const baseUrl = 'https://rickandmortyapi.com/api/character';
 
 const CharactersList: React.FC = () => {
 
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  
   const [characters, setCharacters] = useState<CharactersListType>([]);
+
   const top = useRef<ScrollView>(null);
   const [pageInfo, setPageInfo] = useState({
     count: 0,
@@ -31,8 +33,8 @@ const CharactersList: React.FC = () => {
     next: '',
     prev: ''
   });
+
   const [name, setName] = useState('');
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const scrollToTop = () => {
     top.current?.scrollTo({
@@ -97,6 +99,7 @@ const CharactersList: React.FC = () => {
     <CharacterItem character={item} onPress={handleCharacterPress} />
   );
 
+  
   return (
     <ImageBackground source={{ uri: 'https://wallpapercave.com/wp/wp11151412.png' }}>
       <ScrollView ref={top} style={{ minHeight: '100%' }}>
