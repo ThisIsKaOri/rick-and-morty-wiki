@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 import { CharacterType, CharactersListType } from '../models/Character';
-import { RootStackParamList } from '../App';
+import { CharactersStackParamList } from '../App';
 import CharacterItem from './CharacterItem';
 
 type PageInfoType = {
@@ -22,7 +22,7 @@ const baseUrl = 'https://rickandmortyapi.com/api/character';
 
 const CharactersList: React.FC = () => {
 
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation<StackNavigationProp<CharactersStackParamList>>();
   
   const [characters, setCharacters] = useState<CharactersListType>([]);
 
